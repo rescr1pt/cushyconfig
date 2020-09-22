@@ -47,10 +47,16 @@ CushyConfig::~CushyConfig()
 
 void CushyConfig::load()
 {
+    isInitialized_ = false;
+
+    if (fs_.is_open()) {
+        fs_.close();
+    }
+
     fs_.open(fileName_, std::fstream::in);
 
     if (!fs_.is_open()) {
-        isInitialized_ = false;
+        throw Exception("Cannot configuration config file");
         return;
     }
 
@@ -194,6 +200,8 @@ void CushyConfig::load()
 
 void CushyConfig::save()
 {
+    isInitialized_ = false;
+
     if (fs_.is_open()) {
         fs_.close();
     }
@@ -214,11 +222,21 @@ void CushyConfig::save()
     isInitialized_ = true;
 }
 
+void CushyConfig::resetParameters()
+{
+    parameters_.clear();
+}
+
 void CushyConfig::addParameter(const std::string& name, EParameterTypes type, void* outValue)
 {
     auto& parameter = parameters_[name];
     parameter.type_ = type;
     parameter.outValue_ = outValue;
+}
+
+void CushyConfig::removeParameter(const std::string& name)
+{
+    parameters_.erase(name);
 }
 
 std::string CushyConfig::toSave(void* data, EParameterTypes type)

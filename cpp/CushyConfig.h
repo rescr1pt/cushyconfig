@@ -63,6 +63,8 @@ public:
     bool isInitialized() const noexcept { return isInitialized_; }
 
 protected:
+    void resetParameters();
+
     void addParameter(const std::string& name, unsigned char& outValue) { addParameter(name, EParameterTypes::UChar, &outValue); }
     void addParameter(const std::string& name, char& outValue) { addParameter(name, EParameterTypes::Char, &outValue); }
     void addParameter(const std::string& name, unsigned short& outValue) { addParameter(name, EParameterTypes::UShort, &outValue); }
@@ -75,6 +77,8 @@ protected:
     void addParameter(const std::string& name, long long & outValue) { addParameter(name, EParameterTypes::LongLong, &outValue); }
     void addParameter(const std::string& name, std::string& outValue) { addParameter(name, EParameterTypes::String, &outValue); }
     void addParameter(const std::string& name, ICustomType& outValue) { addParameter(name, EParameterTypes::Custom, &outValue); }
+
+    void removeParameter(const std::string& name);
 
 private:
     void addParameter(const std::string& name, EParameterTypes type, void* outValue);
